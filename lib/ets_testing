@@ -1,0 +1,82 @@
+
+users : username to password
+tweets :  tweet_id, username, message, tweet_time
+mentions : mentioned_username to tweetIDs # take care to put mention only once even if mentioned twice
+hash_tags : hash_tags to tweetIDs
+retweets : retweet_id , username , tweetIDs, retweet_time # can retweet twice
+subscriptions: #username to celebrity_ids
+
+all_tweets = :ets.match(:tweets, {:_, :"$1", :"$2"})
+user1_subscriptions = :ets.match(:subscriptions, {"user1",:"$1"})  |> Enum.map(fn [x] -> x end)
+all_tweets |> Enum.filter(fn [x,y] -> Enum.member?(user1_subscriptions,x) end)
+
+
+:ets.new(:users, [:set, :public, :named_table])
+:ets.new(:tweets, [:set, :public, :named_table])
+:ets.new(:mentions, [:bag, :public, :named_table])
+:ets.new(:hash_tags, [:bag, :public, :named_table])
+:ets.new(:re_tweets, [:duplicate_bag, :public, :named_table])
+:ets.new(:subscriptions, [:bag, :public, :named_table])
+
+
+
+:ets.insert(:users, {"user1", "password1"})
+:ets.insert(:users, {"user2", "password1"})
+:ets.insert(:users, {"user3", "password1"})
+:ets.insert(:users, {"user4", "password1"})
+:ets.insert(:users, {"user5", "password1"})
+:ets.insert(:users, {"user6", "password1"})
+
+
+:ets.insert(:re_tweets, {"user1", 7})
+:ets.insert(:re_tweets, {"user3", 7})
+:ets.insert(:re_tweets, {"user1", 15})
+:ets.insert(:re_tweets, {"user2", 18})
+:ets.insert(:re_tweets, {"user4", 1})
+:ets.insert(:re_tweets, {"user4", 28})
+:ets.insert(:re_tweets, {"user5", 3})
+:ets.insert(:re_tweets, {"user5", 6})
+
+
+:ets.insert(:subscriptions, {"user1", "user2"})
+:ets.insert(:subscriptions, {"user1", "user4"})
+:ets.insert(:subscriptions, {"user2", "user3"})
+:ets.insert(:subscriptions, {"user3", "user5"})
+:ets.insert(:subscriptions, {"user3", "user4"})
+:ets.insert(:subscriptions, {"user4", "user1"})
+:ets.insert(:subscriptions, {"user4", "user2"})
+:ets.insert(:subscriptions, {"user5", "user2"})
+:ets.insert(:subscriptions, {"user5", "user4"})
+
+
+
+:ets.insert(:tweets, {1, "user1", "Hello 1", DateTime.utc_now})
+:ets.insert(:tweets, {2, "user1","Hello 2", DateTime.utc_now})
+:ets.insert(:tweets, {3, "user1","Hello 3"})
+:ets.insert(:tweets, {4, "user1","Hello 4"})
+:ets.insert(:tweets, {5, "user1","Hello 5"})
+:ets.insert(:tweets, {6, "user1","Hello 6"})
+:ets.insert(:tweets, {7, "user2", "Hello 7"})
+:ets.insert(:tweets, {8, "user2", "Hello 8"})
+:ets.insert(:tweets, {9, "user2", "Hello 9"})
+:ets.insert(:tweets, {10, "user2", "Hello 10"})
+:ets.insert(:tweets, {11, "user2", "Hello 11"})
+:ets.insert(:tweets, {12, "user2", "Hello 12"})
+:ets.insert(:tweets, {13, "user3", "Hello 13"})
+:ets.insert(:tweets, {14, "user3", "Hello 14"})
+:ets.insert(:tweets, {15, "user3", "Hello 15"})
+:ets.insert(:tweets, {16, "user3", "Hello 16"})
+:ets.insert(:tweets, {17, "user3", "Hello 17"})
+:ets.insert(:tweets, {18, "user3", "Hello 18"})
+:ets.insert(:tweets, {19, "user4", "Hello 19"})
+:ets.insert(:tweets, {20, "user4", "Hello 20"})
+:ets.insert(:tweets, {21, "user4", "Hello 21"})
+:ets.insert(:tweets, {22, "user4", "Hello 22"})
+:ets.insert(:tweets, {23, "user4", "Hello 23"})
+:ets.insert(:tweets, {24, "user4", "Hello 24"})
+:ets.insert(:tweets, {25, "user5", "Hello 25"})
+:ets.insert(:tweets, {26, "user5", "Hello 26"})
+:ets.insert(:tweets, {27, "user5", "Hello 27"})
+:ets.insert(:tweets, {28, "user5", "Hello 28"})
+:ets.insert(:tweets, {29, "user5", "Hello 29"})
+:ets.insert(:tweets, {30, "user5", "Hello 30"})
